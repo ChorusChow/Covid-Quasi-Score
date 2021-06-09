@@ -20,7 +20,7 @@ To demonstrate its usage and performance (as in Section 5 of the paper), we use 
 
 Further, the code provides an bootstrap inspection on construct a bootstrap confidence interval for the parameters and a bootstrap confidence band for the instantaneous reproduction number with default tunning parameter block length tunningl=45.
 
-QSOEID is a function coded in QSOEID.R file under [Covid-Quasi-Score](https://github.com/ChorusChow). 
+QSOEID is a function coded in QSOEID.R file under [Covid-Quasi-Score](https://github.com/ChorusChow/Covid-Quasi-Score). 
 
 ## QSOEID workflow (Figure 2)
 ![](workflow.png)
@@ -28,7 +28,8 @@ QSOEID is a function coded in QSOEID.R file under [Covid-Quasi-Score](https://gi
 ## Package Requirements
 - A database with clear and consistent variable names
 - R version: R (>= 4.0.2)
-- On Windows: download and install [RTools](http://cran.r-project.org/bin/windows/Rtools/) 
+- On Windows: download and install [pracma](https://CRAN.R-project.org/package=pracma), [ggplot2](https://CRAN.R-project.org/package=ggplot2), [EpiEstim](https://CRAN.R-project.org/package=EpiEstim), [nlme](https://CRAN.R-project.org/package=nlme), [dlnm](https://CRAN.R-project.org/package=dlnm), [tsModel](https://CRAN.R-project.org/package=tsModel), [corrplot](https://CRAN.R-project.org/package=corrplot), [mvtnorm](https://CRAN.R-project.org/package=mvtnorm), [stats](https://CRAN.R-project.org/package=stats), [gridExtra](https://CRAN.R-project.org/package=gridExtra), [ggridges](https://CRAN.R-project.org/package=ggridges),
+[lubridate](https://CRAN.R-project.org/package=lubridate)
 
 ## Install package
 
