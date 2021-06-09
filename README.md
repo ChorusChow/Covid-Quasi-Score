@@ -31,33 +31,11 @@ QSOEID is a function coded in QSOEID.R file under [Covid-Quasi-Score](https://gi
 - On Windows: download and install [pracma](https://CRAN.R-project.org/package=pracma), [ggplot2](https://CRAN.R-project.org/package=ggplot2), [EpiEstim](https://CRAN.R-project.org/package=EpiEstim), [nlme](https://CRAN.R-project.org/package=nlme), [dlnm](https://CRAN.R-project.org/package=dlnm), [tsModel](https://CRAN.R-project.org/package=tsModel), [corrplot](https://CRAN.R-project.org/package=corrplot), [mvtnorm](https://CRAN.R-project.org/package=mvtnorm), [stats](https://CRAN.R-project.org/package=stats), [gridExtra](https://CRAN.R-project.org/package=gridExtra), [ggridges](https://CRAN.R-project.org/package=ggridges),
 [lubridate](https://CRAN.R-project.org/package=lubridate)
 
-## Install package
+## Run QSOEID example with code
 
-To implement DLMM algorithms, we need to install the `pda` package.  
+In the example below we aim to testify the performance of proposed quasi-score online estimation method. Two daily covariates was generated independently from a normal distribution with trend term and a uniform distribution with logistic transformation. The first covariate is generated to mimic the temperature of Philadelphia between Mar.1st and May.31st, 2020, while the second is for mimicking the social distancing measured by a percent change in visits to nonessential businesses revealed by daily cell-phone movement within each county. We using a AR(1) structure and assume the fitted model is correctly specified and thus the parameters of interest would be denoted as (\phi_0,\theta_1,\beta_1,\beta_2).
 
-1. In RStudio, create a new project: File -> New Project... -> New Directory -> New Project. 
-
-2. Execute the following R code: 
-  
-  ```r
-# Install the latest version via github (recommended):
-install.packages("devtools")
-library(devtools)
-devtools::install_github("penncil/pda")
-
-# Or you can install from CRAN:
-install.packages("pda")
-
-```
-
-The installation time is about 20 secs via github and 5 secs via CRAN (normal personal computer). 
-
-In the toy example below we aim to analyze the association of hospitalization length of stay (LOS) with age, sex and lab test using linear mixed model, assuming site-specific random intercepts. We demonstrate using PDA DLMM can obtain identical estimation as the pooled analysis. 
-
-We run the example in local directory. In actual collaboration, account/password for `pda` server will be assigned to the sites at the server https://pda.one. Each site can access via web browser to check the communication of the summary stats.
-
-
-### *Run DLMM example with code*
+We run the example in local directory.
 
 Step 0: load related R packages and prepare sample data
 
