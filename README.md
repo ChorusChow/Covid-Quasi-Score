@@ -33,7 +33,7 @@ QSOEID is a function coded in QSOEID.R file under [Covid-Quasi-Score](https://gi
 
 ## Run QSOEID example with code
 
-In the example below we aim to testify the performance of proposed quasi-score online estimation method. Two daily covariates was generated independently from a normal distribution with trend term and a uniform distribution with logistic transformation. The first covariate is generated to mimic the temperature of Philadelphia between Mar.1st and May.31st, 2020, while the second is for mimicking the social distancing measured by a percent change in visits to nonessential businesses revealed by daily cell-phone movement within each county. We using a AR(1) structure and assume the fitted model is correctly specified and thus the parameters of interest would be denoted as (\phi_0,\theta_1,\beta_1,\beta_2).
+In the example below we aim to testify the performance of proposed quasi-score online estimation method. Two daily covariates was generated independently from a normal distribution with trend term and a uniform distribution with logistic transformation. The first covariate is generated to mimic the temperature of Philadelphia between Mar.1st and May.31st, 2020, while the second is for mimicking the social distancing measured by a percent change in visits to nonessential businesses revealed by daily cell-phone movement within each county. We using a AR(1) structure and assume the fitted model is correctly specified and thus the parameters of interest would be denoted as OraclePhi=(\phi_0,\theta_1) and OracleBeta=(\beta_1,\beta_2).
 
 We run the example in local directory.
 
@@ -41,12 +41,44 @@ Step 0: load related R packages and prepare sample data
 
 ```r
 ## load packages
-require(pda) 
-require(lme4) 
+library(pracma)
+library(ggplot2)
+library(EpiEstim)
+library(nlme)
+library(dlnm)
+library(tsModel)
+library(corrplot)
+library(mvtnorm)
+library(stats)
+library(gridExtra)
+library(ggridges)
+library(lubridate)
+
+## set working directory
+setwd("~/Desktop/QSOEID")
 
 ## sample data
-?LOS
-data(LOS)  
+
+### Set oracle parameter
+## tau_0, pre-specified time point where before date tau_0, the MLE will be applied. Default tau_0=5.
+tau_0=5
+## NoCov, number of covariates we choose
+NoCov=2
+## T, number of observations/days
+T=120
+## Parameter of interest
+OracleBeta=c(-0.02,-0.125)
+OraclePhi=c(0.5,0.7)
+## I_0, start cases
+I_0=500
+## rep, number of replications for bootstrap
+rep=200
+## tunningl, the block length of a fragment of the time series (daily incident cases) used in bootstrap
+tunningl=45
+
+### generate daily incident cases and covariates data
+
+
 
 ## split the data to 3 separate sets (patient-level data)
 LOS_split <- split(LOS, LOS$site)
