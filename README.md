@@ -66,6 +66,8 @@ tau_0=5
 NoCov=2
 ## T, number of observations/days
 T=120
+### R[0], the instantaneous reproduction number at time 0.
+R_0=3
 ## Parameter of interest
 OracleBeta=c(-0.02,-0.125)
 OraclePhi=c(0.5,0.7)
@@ -75,9 +77,13 @@ I_0=500
 rep=200
 ## tunningl, the block length of a fragment of the time series (daily incident cases) used in bootstrap
 tunningl=45
+## bias_corr_const, the bias correction constant, default is bias_corr_const=1
+bias_corr_const=exp(-0.001/2)
 
 ### generate daily incident cases and covariates data
-
+Z<-matrix(data=NA, nrow=T, ncol=NoCov)
+for (t in 1:T) {Z[t,1]=5-(T/8)+((2*t)/8)+rnorm(1,mean=0,sd=3)}
+Z[,2]=logit( runif(T,min=0.01,max=0.99) )+2
 
 
 ## split the data to 3 separate sets (patient-level data)
