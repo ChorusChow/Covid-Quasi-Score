@@ -76,7 +76,7 @@ tunningl=45
 bias_corr_const=exp(-0.001/2)
 ``` 
 
-Step 1: Sample data. To avoid redundancy, we generated sample in a seperated R-file with oracle parameter values (\phi_0,\theta_1,\beta_1,\beta_2)=(0.5,0.7,-0.02,-0.125), and the sampled data includes covariates Z, being a (T*NoCov) matrix, and incident cases I, being a (1*T) matrix.
+Step 1: Sample data. To avoid redundancy, we generated sample in a seperated R-file with oracle parameter values (\phi_0,\theta_1,\beta_1,\beta_2)=(0.5,0.7,-0.02,-0.125), and the sampled data includes covariates Z, being a (T \times NoCov) matrix, and incident cases I, being a (1 \times T) matrix.
 
 ```r
 load("sampled_data.rda")
