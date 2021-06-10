@@ -16,7 +16,7 @@ This README is prepared for journal peer review of the "hybrid statistical-epide
 
 The proposed Quasi-Score online estimator is proposed for estimating the instantaneous reproduction number of an transmission disease that meets the basic assumptions of time-since-infection model with daily incident cases and covariates data. It allow covariates with measurement error to participate in the model while impose no distributional assumptions, and can update estimators online whenever new data are available.
 
-To demonstrate its usage and performance (as in Section 5 of the paper), we use a simulated data (incident cases of a transmission disease) with time length T=120, initiated incident cases I_0=500 and two simulated covariates data to testify its performance on estimating the association of the instantaneous reproduction number of a transmission disease and potiential covariates. The current code version is written for a special case of the model (as described in Section 4 of the paper) with the link function h being the log function, I_t|\mathcal{F}_{t-1} \sim Poisson(R_t \Lambda_t), and allows two covariates inputs (required to be invertible for its sample covariance matrix with days greater than two.)
+To demonstrate its usage and performance (as in Section 5 of the paper), we use a simulated data (incident cases of a transmission disease) with time length T=120, initiated incident cases I_0=500 and two simulated covariates data to testify its performance on estimating the association of the instantaneous reproduction number of a transmission disease and potiential covariates. The current code version is written for a special case of the model (as described in Section 4 of the paper) with the link function h being the log function, I_t|\mathcal{F}_{t-1} \sim Poisson(R_t \Lambda_t), the model structure admits AR(1) form and allows two covariates inputs (required to be invertible for its sample covariance matrix with days greater than two.)
 
 Further, the code provides an bootstrap inspection on construct a bootstrap confidence interval for the parameters and a bootstrap confidence band for the instantaneous reproduction number with default tunning parameter block length tunningl=45.
 
@@ -33,11 +33,11 @@ QSOEID is a function coded in QSOEID.R file under [Covid-Quasi-Score](https://gi
 
 ## Run QSOEID example with code
 
-In the example below we aim to testify the performance of proposed quasi-score online estimation method. Two daily covariates was generated independently from a normal distribution with trend term and a uniform distribution with logistic transformation. The first covariate is generated to mimic the temperature of Philadelphia between Mar.1st and May.31st, 2020, while the second is for mimicking the social distancing measured by a percent change in visits to nonessential businesses revealed by daily cell-phone movement within each county. We using a AR(1) structure and assume the fitted model is correctly specified and thus the parameters of interest would be denoted as OraclePhi=(\phi_0,\theta_1) and OracleBeta=(\beta_1,\beta_2).
+In the example below we aim to testify the performance of proposed quasi-score online estimation method. Two daily covariates was generated independently from a normal distribution with trend term and a uniform distribution with logistic transformation. The first covariate is generated to mimic the temperature of Philadelphia between Mar.1st and May.31st, 2020, while the second is for mimicking the social distancing measured by a percent change in visits to nonessential businesses revealed by daily cell-phone movement within each county. We using a AR(1) structure and assume the fitted model is correctly specified and thus the parameters of interest would be denoted as (\phi_0,\theta_1,\beta_1,\beta_2).
 
 We run the example in local directory.
 
-Step 0: load related R packages and prepare sample data
+Step 0: load related R packages and set tunning parameters
 
 ```r
 ## load packages
@@ -57,9 +57,7 @@ library(lubridate)
 ## set working directory
 setwd("~/Desktop/QSOEID")
 
-## sample data
-
-### Set oracle parameter
+### Set tunning parameter
 ## tau_0, pre-specified time point where before date tau_0, the MLE will be applied. Default tau_0=5.
 tau_0=5
 ## NoCov, number of covariates we choose
@@ -68,9 +66,6 @@ NoCov=2
 T=120
 ### R[0], the instantaneous reproduction number at time 0.
 R_0=3
-## Parameter of interest
-OracleBeta=c(-0.02,-0.125)
-OraclePhi=c(0.5,0.7)
 ## I_0, start cases
 I_0=500
 ## rep, number of replications for bootstrap
@@ -79,17 +74,13 @@ rep=200
 tunningl=45
 ## bias_corr_const, the bias correction constant, default is bias_corr_const=1
 bias_corr_const=exp(-0.001/2)
-
-### generate daily incident cases and covariates data
-Z<-matrix(data=NA, nrow=T, ncol=NoCov)
-for (t in 1:T) {Z[t,1]=5-(T/8)+((2*t)/8)+rnorm(1,mean=0,sd=3)}
-Z[,2]=logit( runif(T,min=0.01,max=0.99) )+2
-
-
-## split the data to 3 separate sets (patient-level data)
-LOS_split <- split(LOS, LOS$site)
-
 ``` 
+
+Step 1: Sample data. To avoid redundancy, we generated sample in a seperated R-file with oracle parameter values (\phi_0,\theta_1,\beta_1,\beta_2)=(0.5,0.7,-0.02,-0.125), and the sampled data includes covariates Z, being a (T*NoCov) matrix, and incident cases I, being a (1*T) matrix.
+
+```r
+load("sampled_data.rda")
+```
 
 Step 1: DLMM Initialization
 
