@@ -176,6 +176,8 @@ restrial1
                      labels=c(30, 60, 90, 120), limits=c(0,120) ) 
   ```
   
+  ![](Instantaneous_reproduction_number.png)
+  
   The running time for QSOEID function in this demo is about 1.7 min. 
 
 
