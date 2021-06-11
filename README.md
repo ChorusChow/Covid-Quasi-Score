@@ -89,6 +89,8 @@ source("QSOEID.R")
 timeQSOEID=Sys.time()
 restrial1=QSOEID(Z,I)
 timeQSOEID=Sys.time()-timeQSOEID
+
+restrial1
 ``` 
 
 ## Results
@@ -106,7 +108,72 @@ timeQSOEID=Sys.time()-timeQSOEID
   The estimation of the instantaneous reproduction for correctly specified model in comparison with the estimator for two misspecified model (as in Section 5 of the paper).
   
   ```r
-  a
+  inst.reproduction.nb=data.frame(Time= 1:T)
+  inst.reproduction.nb$oracle.R0=R[1,]
+  inst.reproduction.nb$Est.R0=restrial1$EstR[2,]
+  inst.reproduction.nb$Est.R0.band.upp=restrial1$EstR[3,]
+  inst.reproduction.nb$Est.R0.band.low=restrial1$EstR[1,]
+  inst.reproduction.nb$type.R0=c("Model 1")
+  
+  load("misspecified_data_trial1.rda")
+
+  time2<-Sys.time()
+  restrial2=QSOEID(Z=Ztrial1[,1:NoCov],I=Itrial1)
+  time2=Sys.time()-time2
+
+  inst.reproduction.nb2=data.frame(Time= 1:T)
+  inst.reproduction.nb2$oracle.R0=Rtrial1[1,]
+  inst.reproduction.nb2$Est.R0=restrial2$EstR[2,]
+  inst.reproduction.nb2$Est.R0.band.upp=restrial2$EstR[3,]
+  inst.reproduction.nb2$Est.R0.band.low=restrial2$EstR[1,]
+  inst.reproduction.nb2$type.R0=c("Model 8")
+  
+  load("misspecified_data_trial2.rda")
+
+  time3<-Sys.time()
+  restrial3=QSOEID(Ztrial2,Itrial2)
+  time3=Sys.time()-time3
+
+  inst.reproduction.nb3=data.frame(Time= 1:T)
+  inst.reproduction.nb3$oracle.R0=Rtrial2[1,]
+  inst.reproduction.nb3$Est.R0=restrial3$EstR[2,]
+  inst.reproduction.nb3$Est.R0.band.upp=restrial3$EstR[3,]
+  inst.reproduction.nb3$Est.R0.band.low=restrial3$EstR[1,]
+  inst.reproduction.nb3$type.R0=c("Model 9")
+  
+  yuplim=9
+  for (i in 1:T) {
+     inst.reproduction.nb2$Est.R0.band.upp[i]=min(inst.reproduction.nb2$Est.R0.band.upp[i],yuplim)
+     inst.reproduction.nb3$Est.R0.band.upp[i]=min(inst.reproduction.nb3$Est.R0.band.upp[i],yuplim)
+  }
+  inst.reproduction.nb.combind=rbind(inst.reproduction.nb,inst.reproduction.nb2)
+  inst.reproduction.nb.combind=rbind(inst.reproduction.nb.combind,inst.reproduction.nb3)
+
+  mydf <-rbind(inst.reproduction.nb.combind[,c(1,3,4,5,6)], inst.reproduction.nb.combind[,c(1,3,4,5,6)])
+  mydf[361:720, 2] <- inst.reproduction.nb.combind$oracle.R0
+  mydf$group <- rep(c('Estimated Instantaneous Reproduction Number', 'Oracle Instantaneous Reproduction Number'), each=360)
+  names(mydf)[2] <- 'R0'
+  
+  ggplot(mydf, aes(Time)) + 
+    geom_line(aes(y=R0, colour=group, lty=group)) + 
+    geom_line(aes(y=1), colour="black",lty=2)+
+    labs(
+         x = "Time",
+         y = "instantaneous reproduction number"
+    )+
+    geom_ribbon(aes(ymin=Est.R0.band.low, ymax=Est.R0.band.upp), alpha=0.2)+
+    facet_grid(type.R0 ~ .)+
+    theme_bw() + 
+    theme(
+         panel.grid.minor = element_blank(),
+         legend.title = element_blank(),
+        legend.position = c(0.75,0.9) 
+    ) +
+    scale_color_manual(values=c("dodgerblue", "orchid"))+
+    scale_linetype_manual(values=c("twodash", "solid"))+
+    ylim(0, (yuplim))+
+    scale_x_continuous(name='Time', breaks=c(30, 60, 90, 120), 
+                     labels=c(30, 60, 90, 120), limits=c(0,120) ) 
   ```
   
   The running time for QSOEID function in this demo is about 1.7 min. 
