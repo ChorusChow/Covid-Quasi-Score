@@ -103,9 +103,13 @@ timeQSOEID=Sys.time()-timeQSOEID
   | \beta_2   |   -0.125     | -0.1336   |  -0.1368  | -0.0983  |
   
   
+  The estimation of the instantaneous reproduction for correctly specified model in comparison with the estimator for two misspecified model (as in Section 5 of the paper).
   
+  ```r
+  a
+  ```
   
-  The running time in each site in this demo is about 4-5 secs. 
+  The running time for QSOEID function in this demo is about 1.7 min. 
 
 
 ## How to run DLMM on your data?
