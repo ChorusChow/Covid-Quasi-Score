@@ -150,7 +150,7 @@ restrial1
   inst.reproduction.nb.combind=rbind(inst.reproduction.nb.combind,inst.reproduction.nb3)
 
   mydf <-rbind(inst.reproduction.nb.combind[,c(1,3,4,5,6)], inst.reproduction.nb.combind[,c(1,3,4,5,6)])
-  mydf[361:720, 2] <- inst.reproduction.nb.combind$oracle.R0
+  mydf[(1+3*T):(6*T), 2] <- inst.reproduction.nb.combind$oracle.R0
   mydf$group <- rep(c('Estimated Instantaneous Reproduction Number', 'Oracle Instantaneous Reproduction Number'), each=360)
   names(mydf)[2] <- 'R0'
   
@@ -183,6 +183,6 @@ restrial1
 
 ## How to run DLMM on your data?
 
-* Get the data ready, which requires no missing values and clear variable names.
-* Define the `control` by specifying the model, data, outcome, variables, site names, and local site.
-* Directly run `pda` function as illustrated above.
+* Get the data ready, which requires no missing values and clear variable names. 
+* Set the tunning parameters `tau_0, NoCov, T, R_0, I_0, rep, tunningl, bias_corr_const` so the model is specified. The input data includes covariates Z, being a (T \times NoCov) matrix, incident cases I, and being a (1 \times T) matrix. 
+* Directly run `QSOEID` function as illustrated above.
