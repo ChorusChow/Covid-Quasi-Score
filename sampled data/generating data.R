@@ -78,8 +78,72 @@ save(Z,I,R,file="sampled_data.rda")
 
 
 
+###############  generate misspecified data trial one #########################
+Ztrial1<-matrix(data=NA, nrow=T, ncol=(NoCov+1) )
+for (t in 1:T) {  Ztrial1[t,1]=10-(T/8)+(t/4)+rnorm(1,mean=0,sd=3) }
+Ztrial1[,2]=logit( runif(T,min=0.01,max=0.99) )+2
+for (t in 1:T) {  Ztrial1[t,3]=-(T/18)+(t/9)+rnorm(1,mean=0,sd=5) }
+## Oracle beta
+OracleBeta<-as.matrix(c(-0.02,-0.125,-0.03),nrow=3,ncol=1)
+## R[t], the instantaneous reproduction number at time t.
+Rtrial1<-matrix(data = NA, nrow=1,ncol=T)
+epsilon<-rmvnorm(1,mean=rep(0,T),sigma = diag( (-2*log(bias_corr_const))  ,nrow = T,ncol = T))
+Rtrial1[1]=exp( (OraclePhi[1]) + (OraclePhi[2]*log(R_0)) + (Ztrial1[1,]%*%OracleBeta) + (epsilon[1]) )
+for (t in 2:T) { Rtrial1[t]=exp( (OraclePhi[1]) + (OraclePhi[2]*log(Rtrial1[(t-1)]))+ (Ztrial1[t,]%*%OracleBeta) + (epsilon[t]) ) }
+## Generate I[t], number of incidence at time t.
+Itrial1<-matrix(data = NA, nrow=1,ncol=T)
+Itrial1[1]=rpois(1,lambda = (Rtrial1[1]*I_0*Omega[1]))
+for (t in 2:25) { Itrial1[t]=rpois(1,lambda = ( Rtrial1[t]*((I_0*Omega[t])+ (Itrial1[1:(t-1)]%*%Omega[(t-1):1] )  )  ) ) }
+for (t in 26:T) {
+  if (( Itrial1[(t-1):(t-25)]%*%Omega[1:25]  )<=100000){
+    Itrial1[t]=rpois(1,lambda = (Rtrial1[t]*( Itrial1[(t-1):(t-25)]%*%Omega[1:25]  ) ))
+  }else {
+    multipconstant= (Rtrial1[t]*( Itrial1[(t-1):(t-25)]%*%Omega[1:25]  ) )%/%100000  
+    residueconstant= (Rtrial1[t]*( Itrial1[(t-1):(t-25)]%*%Omega[1:25]  ) )%%100000  
+    Itrial1[t]=sum( rpois(multipconstant,lambda = 100000   ) ) + rpois(1,lambda = residueconstant  )
+  }
+}
 
 
+
+save(Ztrial1,Itrial1,Rtrial1,file="misspecified_data_trial1.rda")
+
+
+
+###############  generate misspecified data trial one #########################
+Ztrial2<-matrix(data=NA, nrow=T, ncol=NoCov )
+for (t in 1:T) {  Ztrial2[t,1]=7.5-(T/8)+(t/4)+rnorm(1,mean=0,sd=3) }
+Ztrial2[,2]=logit( runif(T,min=0.01,max=0.99) )+2
+## Oracle phi
+OraclePhi<-as.matrix(c(0.5,0.5,0.3),nrow=3,ncol=1)
+## Oracle beta
+OracleBeta=as.matrix(c(-0.02,-0.125),nrow=NoCov,ncol=1)
+## R[t], the instantaneous reproduction number at time t.
+Rmin1=2
+Rtrial2<-matrix(data = NA, nrow=1,ncol=T)
+epsilon<-rmvnorm(1,mean=rep(0,T),sigma = diag( (-2*log(bias_corr_const))  ,nrow = T,ncol = T))
+Rtrial2[1]=exp( (OraclePhi[1]) + (OraclePhi[2]*log(R_0)) +(OraclePhi[3]*log(Rmin1)) + (Ztrial2[1,]%*%OracleBeta) + (epsilon[1]) )
+Rtrial2[2]=exp( (OraclePhi[1]) + (OraclePhi[2]*log(Rtrial2[1])) +(OraclePhi[3]*log(R_0)) + (Ztrial2[2,]%*%OracleBeta) + (epsilon[2]) )
+for (t in 3:T) { 
+  Rtrial2[t]=exp( (OraclePhi[1]) + (OraclePhi[2]*log(Rtrial2[(t-1)])) +(OraclePhi[3]*log(Rtrial2[(t-2)])) + (Ztrial2[t,]%*%OracleBeta) + (epsilon[t]) )
+  }
+## Generate I[t], number of incidence at time t.
+Itrial2<-matrix(data = NA, nrow=1,ncol=T)
+Itrial2[1]=rpois(1,lambda = (Rtrial2[1]*I_0*Omega[1]))
+for (t in 2:25) { Itrial2[t]=rpois(1,lambda = ( Rtrial2[t]*((I_0*Omega[t])+ (Itrial2[1:(t-1)]%*%Omega[(t-1):1] )  )  ) ) }
+for (t in 26:T) {
+  if (( Itrial2[(t-1):(t-25)]%*%Omega[1:25]  )<=100000){
+    Itrial2[t]=rpois(1,lambda = (Rtrial2[t]*( Itrial2[(t-1):(t-25)]%*%Omega[1:25]  ) ))
+  }else {
+    multipconstant= (Rtrial2[t]*( Itrial2[(t-1):(t-25)]%*%Omega[1:25]  ) )%/%100000  
+    residueconstant= (Rtrial2[t]*( Itrial2[(t-1):(t-25)]%*%Omega[1:25]  ) )%%100000  
+    Itrial2[t]=sum( rpois(multipconstant,lambda = 100000   ) ) + rpois(1,lambda = residueconstant  )
+  }
+}
+
+
+
+save(Ztrial2,Itrial2,Rtrial2,file="misspecified_data_trial2.rda")
 
 
 
