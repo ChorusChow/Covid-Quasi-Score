@@ -55,7 +55,7 @@ library(ggridges)
 library(lubridate)
 
 ## set working directory
-setwd("~/Desktop/QSOEID")
+setwd()
 
 ### Set tunning parameter
 ## tau_0, pre-specified time point where before date tau_0, the MLE will be applied. Default tau_0=5.

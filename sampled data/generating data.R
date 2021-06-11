@@ -13,7 +13,7 @@ library(ggridges)
 library(lubridate)
 
 # set working directory
-setwd("~/Dropbox/working on folder/Covid/Code_for_model/Code_reorganize/sampled data/")
+#setwd()
 ## transmissibility rate of the epidemic (infectiousness profile)
 Omega<-as.vector(c(data=NA,length = 25))
 for (i in 1:25) {
