@@ -10,7 +10,7 @@ library(pracma)
 library(usmap)
 
 # set working directory
-setwd('/Users/shij/Desktop/Covid_code_real_data_organize/')
+setwd('/Users/shij/Documents/GitHub/Covid-Quasi-Score/Covid_code_real_data_organize/')
 # source R function
 source('./functions/covid-function_reorganized_0706.R')
 
