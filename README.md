@@ -181,7 +181,7 @@ restrial1
   The running time for QSOEID function in this demo is about 1.7 min. 
 
 
-## How to run DLMM on your data?
+## How to run QSOEID on your data?
 
 * Get the data ready, which requires no missing values and clear variable names. 
 * Set the tunning parameters `tau_0, NoCov, T, R_0, I_0, rep, tunningl, bias_corr_const` so the model is specified. The input data includes covariates Z, being a (T \times NoCov) matrix, incident cases I, and being a (1 \times T) matrix. 
